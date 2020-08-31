@@ -26,24 +26,35 @@ class NewVisitorTest(unittest.TestCase):
 
         # The user is invited to edit their personal profile
         inputbox = self.browser.find_element_by_id('id_personal_profile')  
-        self.assertEqual(
-            inputbox.get_attribute('placeholder'),
-            'Enter Personal Profile'
-        )
 
         # The user types a brief personal profile
+        inputbox.clear()
         inputbox.send_keys('I am Shahram and I am passionate about...')  
 
-        # When the user hits enter, the page updates, the CV page must display 
-        # the new personal profile
-        inputbox.send_keys(Keys.ENTER)  
+        # When the user hits submit, the CV page must display the new personal profile
+        self.browser.find_element_by_id('id_edit_submit').click()  
         time.sleep(1)  
 
-        self.browser.get('http://127.0.0.1:8000/cv/edit/')
         p = self.browser.find_element_by_id('id_personal_profile')
-        self.assertTrue(
-            any(p.text == 'I am Shahram and I am passionate about...' for row in rows)
-        )
+        self.assertTrue(p.text == 'I am Shahram and I am passionate about many things...')
+
+    def test_can_edit_cv_key_skills(self):
+        # The user enters our edit page
+        self.browser.get('http://127.0.0.1:8000/cv/edit/')
+
+        # The user is invited to edit their personal profile
+        inputbox = self.browser.find_element_by_id('id_personal_profile')  
+
+        # The user types a brief personal profile
+        inputbox.clear()
+        inputbox.send_keys('I am Shahram and I am passionate about...')  
+
+        # When the user hits submit, the CV page must display the new personal profile
+        self.browser.find_element_by_id('id_edit_submit').click()  
+        time.sleep(1)  
+
+        p = self.browser.find_element_by_id('id_personal_profile')
+        self.assertTrue(p.text == 'I am Shahram and I am passionate about many things...')        
 
 if __name__ == "__main__":
     unittest.main()
